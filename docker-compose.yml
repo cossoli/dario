@@ -1,34 +1,46 @@
 version: "3.1"
 
-services: 
- db:
+services:
+  db:
     image: mysql:5.7.27
     environment:
-         MYSQL_DATABASE: cursa2019
-         MYSQL_ROOT_PASSWORD: clave123
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_USER: pwauser
+      MYSQL_PASSWORD: pwa123
+      MYSQL_DATABASE: pwa2019
     ports:
-         - 4000:3306
+      - 4000:3306
     volumes:
-        -./mysqldata:/var/lib/mysql
-
- myadmin:
+      - ./mysqldata:/var/lib/mysql
+      
+  myadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-       PMA_HOST: db
-       PHA_PORT: 3306
-       PMA_PASSWORD: clave123
-    ports: 
-         - 8001:80
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: pwauser
+      PMA_PASSWORD: pwa123
+    ports:
+      - 8001:80
 
- app: 
-      
-    image: yiisofware/yii2-php:7.1-apache
+  app:
+    image: yiisoftware/yii2-php:7.1-apache
     volumes:
-         -./src/composer/cache:/root/.composer/cache:delegated
-         -./src/basic:/app:delegated
-    ports:   
-           - 8000:80
-                
-         
-         
- 
+      - ./src/composer/cache:/root/.composer/cache:delegated
+      - ./src/basic:/app:delegated
+    environment:
+      DDBB_NAME: pwa2019
+      DDBB_HOST: db
+      DDBB_USER: pwauser
+      DDBB_PASSWORD: pwa123
+      PRODUCCION: 0
+    ports:
+      - 8000:80
+
+  
+
+
+  
+
+
+  
